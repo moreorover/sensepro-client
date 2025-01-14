@@ -1,0 +1,4 @@
+Physical Alarm Input 1 - Mapped to - IPC Camera 1 at IP 192.168.5.201
+Physical Alarm Input 2 - Mapped to - IPC Camera 2 at IP 192.168.5.202
+Physical Alarm Input 3 - Mapped to - Detector D1
+Physical Alarm Input 4 - Mapped to - Arm/Disarm (State set to NO for ARM)

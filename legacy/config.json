@@ -1,0 +1,173 @@
+{
+  "system_settings": {
+    "arm_disarm_pin": 27,
+    "countdown_duration": 90,
+    "relay_output_pin": "26",
+    "reset_button_pin": "25"
+  },
+  "NVRs": {
+    "Comms Cabinet": {
+      "ip": "192.168.5.200",
+      "protocol": "http",
+      "arm": {
+        "input": "Alarm[0].SensorType",
+        "relay": "NO"
+      },
+      "disarm": {
+        "input": "Alarm[0].SensorType",
+        "relay": "NC"
+      }
+    }
+  },
+  "ipcctv": {
+    "IPC 3 - CCTV": {
+      "protocol": "http",
+      "ip": "192.168.5.203",
+      "pin": 5,
+      "name": "IPC 3 - IPC",
+      "last_triggered": null
+    },
+    "IPC 4 - CCTV": {
+      "protocol": "http",
+      "ip": "192.168.5.204",
+      "pin": 19,
+      "name": "IPC 4 - IPC",
+      "last_triggered": null
+    },
+    "IPC 5 - CCTV": {
+      "protocol": "http",
+      "ip": "192.168.5.205",
+      "pin": 7,
+      "name": "IPC 5 - IPC",
+      "last_triggered": null
+    },
+    "IPC 6 - CCTV": {
+      "protocol": "http",
+      "ip": "192.168.5.206",
+      "pin": 8,
+      "name": "IPC 6 - IPC",
+      "last_triggered": null
+    },
+    "IPC 7 - CCTV": {
+      "protocol": "http",
+      "ip": "192.168.5.207",
+      "pin": 9,
+      "name": "IPC 7 - IPC",
+      "last_triggered": null
+    },
+    "IPC 8 - CCTV": {
+      "protocol": "http",
+      "ip": "192.168.5.208",
+      "pin": 10,
+      "name": "IPC 8 - IPC",
+      "last_triggered": null
+    },
+    "IPC 9 - CCTV": {
+      "protocol": "http",
+      "ip": "192.168.5.209",
+      "pin": 11,
+      "name": "IPC 9 - IPC",
+      "last_triggered": null
+    }
+  },
+  "detectors": {
+    "1": {
+      "pin": 12,
+      "name": "DETECTOR-1",
+      "associated_cameras": ["IPC 3 - CCTV", "IPC 4 - CCTV"],
+      "last_triggered": null
+    },
+    "2": {
+      "pin": 13,
+      "name": "DETECTOR-2",
+      "associated_cameras": ["IPC 4 - CCTV", "IPC 5 - CCTV"],
+      "last_triggered": null
+    },
+    "3": {
+      "pin": 14,
+      "name": "DETECTOR-3",
+      "associated_cameras": ["IPC 3 - CCTV", "IPC 4 - CCTV"],
+      "last_triggered": null
+    },
+    "4": {
+      "pin": 15,
+      "name": "DETECTOR-4",
+      "associated_cameras": ["IPC 7 - CCTV", "IPC 9 - CCTV"],
+      "last_triggered": null
+    },
+    "5": {
+      "pin": 16,
+      "name": "DETECTOR-5",
+      "associated_cameras": ["IPC 7 - CCTV", "IPC 8 - CCTV"],
+      "last_triggered": null
+    },
+    "6": {
+      "pin": 17,
+      "name": "DETECTOR-6",
+      "associated_cameras": ["IPC 7 - CCTV", "IPC 8 - CCTV"],
+      "last_triggered": null
+    }
+  },
+  "time_threshold": 7,
+  "rules": [
+    {
+      "name": "Rule 1",
+      "ipcctvs": ["IPC 3 - CCTV"],
+      "detectors": [1, 3],
+      "type": "any"
+    },
+    {
+      "name": "Rule 2",
+      "ipcctvs": ["IPC 4 - CCTV"],
+      "detectors": [1, 2, 3],
+      "type": "any"
+    },
+    {
+      "name": "Rule 3",
+      "ipcctvs": ["IPC 5 - CCTV", "IPC 6 - CCTV"],
+      "detectors": [2, 1],
+      "type": "any"
+    },
+    {
+      "name": "Rule 4",
+      "ipcctvs": ["IPC 7 - CCTV"],
+      "detectors": [1, 4, 5, 6],
+      "type": "any"
+    },
+    {
+      "name": "Rule 5",
+      "ipcctvs": ["IPC 8 - CCTV"],
+      "detectors": [5, 6, 1],
+      "type": "any"
+    },
+    {
+      "name": "Rule 6",
+      "ipcctvs": ["IPC 9 - CCTV"],
+      "detectors": [1, 4],
+      "type": "any"
+    }
+  ],
+  "LED_Pattern": {
+    "arming": {
+      "protocol": "http",
+      "ip": "192.168.10.230"
+    },
+    "disarm": {
+      "protocol": "http",
+      "ip": "192.168.10.230"
+    },
+    "intrusion": {
+      "protocol": "http",
+      "ip": "192.168.10.230"
+    },
+    "armed": {
+      "protocol": "http",
+      "ip": "192.168.10.230"
+    },
+    "idle": {
+      "protocol": "http",
+      "ip": "192.168.10.230"
+    }
+  }
+}
+

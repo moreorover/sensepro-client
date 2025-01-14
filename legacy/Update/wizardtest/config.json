@@ -1,0 +1,67 @@
+{
+    "system_settings": {
+        "arm_disarm_pin": 7,
+        "countdown_duration": 90
+    },
+    "NVRs": {
+        "NVR-1": {
+            "protocol": "http",
+            "ip": "192.168.5.200",
+            "arm": {
+                "input": "Alarm[4].SensorType",
+                "relay": "NO"
+            },
+            "disarm": {
+                "input": "Alarm[4].SensorType",
+                "relay": "NC"
+            }
+        }
+    },
+    "ipcctv": {
+        "IPC 1 - Camera 1": {
+            "protocol": "http",
+            "ip": "192.168.5.201",
+            "pin": 4,
+            "name": "Camera 1",
+            "detectors": [
+                1
+            ]
+        },
+        "IPC 2 - Camera 2": {
+            "protocol": "http",
+            "ip": "192.168.5.202",
+            "pin": 5,
+            "name": "Camera 2",
+            "detectors": [
+                1
+            ]
+        }
+    },
+    "detectors": {
+        "3": {
+            "pin": 6,
+            "name": "D1"
+        }
+    },
+    "time_threshold": 7,
+    "rules": [
+        {
+            "name": "Rule 1",
+            "ipcctvs": [],
+            "detectors": [
+                1
+            ],
+            "type": "all"
+        },
+        {
+            "name": "Rule 2",
+            "ipcctvs": [
+                "IPC 2 - Camera 2"
+            ],
+            "detectors": [
+                1
+            ],
+            "type": "all"
+        }
+    ]
+}

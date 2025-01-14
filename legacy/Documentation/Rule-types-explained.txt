@@ -1,0 +1,38 @@
+In the context of the SensePro configuration, the rule types define the conditions under which an intrusion is considered "confirmed" based on the triggers from IPCCTV cameras and detectors. The rule types control how these triggers are evaluated. Let's explore the different rule types and their behaviors:
+
+Rule Type: "all"
+The "all" rule type requires that all specified IPCCTV cameras and detectors must trigger within the defined time threshold for the rule to be considered as a confirmed intrusion. This is a more stringent condition, ensuring that multiple sources have detected activity before taking action.
+
+Example Scenario:
+
+Rule: "name": "Rule 1", "type": "all", "ipcctvs": ["IPC 3 - CCTV"], "detectors": [1, 3]
+Behavior: For "Rule 1" to be triggered, both "IPC 3 - CCTV" must detect motion and both Detectors 1 and 3 must also trigger within the time threshold. If any of the specified devices do not trigger, the rule is not met, and no intrusion is confirmed.
+Rule Type: "any"
+The "any" rule type is less strict, requiring that any one of the specified IPCCTV cameras or detectors must trigger within the defined time threshold for the rule to be considered as a confirmed intrusion. This allows for a quicker response to potential intrusions, based on a single trigger from any listed device.
+
+Example Scenario:
+
+Rule: "name": "Rule 2", "type": "any", "ipcctvs": ["IPC 4 - CCTV"], "detectors": [1, 2, 3]
+Behavior: For "Rule 2" to be triggered, if "IPC 4 - CCTV" detects motion or any one of Detectors 1, 2, or 3 trigger within the time threshold, the rule is met, and an intrusion is confirmed. This type is useful for environments where a single detection is enough to warrant an alert.
+Rule Type: "sequence"
+The "sequence" rule type requires that specified IPCCTV cameras and detectors must trigger in a particular sequence within the defined time threshold. This type can be used to detect more complex patterns of movement or behavior, providing a higher level of specificity for intrusion detection.
+
+Example Scenario:
+
+Rule: "name": "Rule 3", "type": "sequence", "ipcctvs": ["IPC 5 - CCTV", "IPC 6 - CCTV"], "detectors": [2, 1]
+Behavior: For "Rule 3" to be triggered, "IPC 5 - CCTV" must first detect motion, followed by "IPC 6 - CCTV", and then Detectors 2 and 1 must trigger in the specified order within the time threshold. If the triggers occur out of order or any are missing, the rule is not met, and no intrusion is confirmed. This type is ideal for monitoring specific paths or sequences of movement.
+Rule Type: "majority"
+The "majority" rule type requires that a majority of the specified IPCCTV cameras and detectors must trigger within the defined time threshold. This rule type offers a balance between "all" and "any," requiring more than one trigger but not necessarily all.
+
+Example Scenario:
+
+Rule: "name": "Rule 4", "type": "majority", "ipcctvs": ["IPC 7 - CCTV", "IPC 8 - CCTV", "IPC 9 - CCTV"], "detectors": [3, 4, 5]
+Behavior: For "Rule 4" to be triggered, a majority (in this case, at least 2 out of 3) of the specified IPCCTV cameras or detectors must trigger within the time threshold. This type provides a flexible yet robust condition for confirming intrusions.
+Implementing Rule Types in SensePro
+When the system evaluates the rules, it checks the conditions specified by the rule type:
+
+"all": Ensures all listed devices trigger.
+"any": Confirms if any one of the devices triggers.
+"sequence": Verifies the specified order of triggers.
+"majority": Confirms if more than half of the listed devices trigger.
+These rule types allow for versatile and comprehensive intrusion detection configurations, enabling the system to cater to various security needs and scenarios.

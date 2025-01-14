@@ -1,0 +1,281 @@
+{
+  "controllerId": "cm5wmlkpu0004d3ns31v1zv9q",
+  "controller": {
+    "id": "cm5wmlkpu0004d3ns31v1zv9q",
+    "name": "Controller 1",
+    "mac": "58:ff:08:9f:d7:d9",
+    "ip": "58.176.180.133",
+    "tailscaleIp": "222.185.129.31",
+    "serialNumber": "UAbhjgahTR",
+    "pin": null,
+    "createdAt": "2025-01-14T15:26:37.602Z",
+    "updatedAt": "2025-01-14T15:26:37.602Z",
+    "locationId": "cm5wmlkpp0002d3ns3j306krs",
+    "deviceTypeId": "controller",
+    "controllerId": null
+  },
+  "devices": [
+    {
+      "id": "cm5wmlkqa000ad3ns36org5zw",
+      "name": "Device 3",
+      "mac": "49:f7:03:26:42:c1",
+      "ip": "208.144.8.183",
+      "tailscaleIp": null,
+      "serialNumber": "ziOureuJsE",
+      "pin": 11,
+      "createdAt": "2025-01-14T15:26:37.618Z",
+      "updatedAt": "2025-01-14T15:46:42.038Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    },
+    {
+      "id": "cm5wmlkqe000cd3nsxpj0029u",
+      "name": "Device 4",
+      "mac": "d5:d2:e4:e1:f4:8b",
+      "ip": "180.77.48.168",
+      "tailscaleIp": null,
+      "serialNumber": "BDSppSavZc",
+      "pin": 12,
+      "createdAt": "2025-01-14T15:26:37.623Z",
+      "updatedAt": "2025-01-14T15:46:45.258Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    },
+    {
+      "id": "cm5wmlkq50008d3nsh7y2gh1h",
+      "name": "Device 2",
+      "mac": "bd:b4:66:a8:3b:81",
+      "ip": "15.230.22.126",
+      "tailscaleIp": null,
+      "serialNumber": "mQGpuXcLBy",
+      "pin": 13,
+      "createdAt": "2025-01-14T15:26:37.614Z",
+      "updatedAt": "2025-01-14T15:46:48.425Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    },
+    {
+      "id": "cm5wmlkpz0006d3ns4ls8ji24",
+      "name": "Device 1",
+      "mac": "fc:c6:e1:77:98:31",
+      "ip": "99.119.55.67",
+      "tailscaleIp": null,
+      "serialNumber": "jpGsuoeuty",
+      "pin": 1,
+      "createdAt": "2025-01-14T15:26:37.608Z",
+      "updatedAt": "2025-01-14T15:36:53.732Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    }
+  ],
+  "rules": [
+    {
+      "rule": {
+        "id": "cm5wmlkqj000ed3ns5hgj0b5e",
+        "name": "Garden",
+        "type": "AND",
+        "controllerId": "cm5wmlkpu0004d3ns31v1zv9q",
+        "locationId": "cm5wmlkpp0002d3ns3j306krs"
+      },
+      "devices": [
+        {
+          "id": "cm5wmlkpz0006d3ns4ls8ji24",
+          "name": "Device 1",
+          "mac": "fc:c6:e1:77:98:31",
+          "ip": "99.119.55.67",
+          "tailscaleIp": null,
+          "serialNumber": "jpGsuoeuty",
+          "pin": 1,
+          "createdAt": "2025-01-14T15:26:37.608Z",
+          "updatedAt": "2025-01-14T15:36:53.732Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        },
+        {
+          "id": "cm5wmlkq50008d3nsh7y2gh1h",
+          "name": "Device 2",
+          "mac": "bd:b4:66:a8:3b:81",
+          "ip": "15.230.22.126",
+          "tailscaleIp": null,
+          "serialNumber": "mQGpuXcLBy",
+          "pin": 13,
+          "createdAt": "2025-01-14T15:26:37.614Z",
+          "updatedAt": "2025-01-14T15:46:48.425Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        },
+        {
+          "id": "cm5wmlkqa000ad3ns36org5zw",
+          "name": "Device 3",
+          "mac": "49:f7:03:26:42:c1",
+          "ip": "208.144.8.183",
+          "tailscaleIp": null,
+          "serialNumber": "ziOureuJsE",
+          "pin": 11,
+          "createdAt": "2025-01-14T15:26:37.618Z",
+          "updatedAt": "2025-01-14T15:46:42.038Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        },
+        {
+          "id": "cm5wmlkqe000cd3nsxpj0029u",
+          "name": "Device 4",
+          "mac": "d5:d2:e4:e1:f4:8b",
+          "ip": "180.77.48.168",
+          "tailscaleIp": null,
+          "serialNumber": "BDSppSavZc",
+          "pin": 12,
+          "createdAt": "2025-01-14T15:26:37.623Z",
+          "updatedAt": "2025-01-14T15:46:45.258Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        }
+      ],
+      "selectedDevices": [
+        "cm5wmlkpz0006d3ns4ls8ji24",
+        "cm5wmlkq50008d3nsh7y2gh1h",
+        "cm5wmlkqa000ad3ns36org5zw",
+        "cm5wmlkqe000cd3nsxpj0029u"
+      ]
+    },
+    {
+      "rule": {
+        "id": "cm5wmlkr7000od3nsf1zhk211",
+        "name": "Front Porch",
+        "type": "OR",
+        "controllerId": "cm5wmlkpu0004d3ns31v1zv9q",
+        "locationId": "cm5wmlkpp0002d3ns3j306krs"
+      },
+      "devices": [
+        {
+          "id": "cm5wmlkpz0006d3ns4ls8ji24",
+          "name": "Device 1",
+          "mac": "fc:c6:e1:77:98:31",
+          "ip": "99.119.55.67",
+          "tailscaleIp": null,
+          "serialNumber": "jpGsuoeuty",
+          "pin": 1,
+          "createdAt": "2025-01-14T15:26:37.608Z",
+          "updatedAt": "2025-01-14T15:36:53.732Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        },
+        {
+          "id": "cm5wmlkq50008d3nsh7y2gh1h",
+          "name": "Device 2",
+          "mac": "bd:b4:66:a8:3b:81",
+          "ip": "15.230.22.126",
+          "tailscaleIp": null,
+          "serialNumber": "mQGpuXcLBy",
+          "pin": 13,
+          "createdAt": "2025-01-14T15:26:37.614Z",
+          "updatedAt": "2025-01-14T15:46:48.425Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        },
+        {
+          "id": "cm5wmlkqa000ad3ns36org5zw",
+          "name": "Device 3",
+          "mac": "49:f7:03:26:42:c1",
+          "ip": "208.144.8.183",
+          "tailscaleIp": null,
+          "serialNumber": "ziOureuJsE",
+          "pin": 11,
+          "createdAt": "2025-01-14T15:26:37.618Z",
+          "updatedAt": "2025-01-14T15:46:42.038Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        },
+        {
+          "id": "cm5wmlkqe000cd3nsxpj0029u",
+          "name": "Device 4",
+          "mac": "d5:d2:e4:e1:f4:8b",
+          "ip": "180.77.48.168",
+          "tailscaleIp": null,
+          "serialNumber": "BDSppSavZc",
+          "pin": 12,
+          "createdAt": "2025-01-14T15:26:37.623Z",
+          "updatedAt": "2025-01-14T15:46:45.258Z",
+          "locationId": "cm5wmlkpp0002d3ns3j306krs",
+          "deviceTypeId": "cctv",
+          "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+        }
+      ],
+      "selectedDevices": [
+        "cm5wmlkpz0006d3ns4ls8ji24",
+        "cm5wmlkq50008d3nsh7y2gh1h",
+        "cm5wmlkqa000ad3ns36org5zw",
+        "cm5wmlkqe000cd3nsxpj0029u"
+      ]
+    }
+  ],
+  "devicesAllowedInRules": [
+    {
+      "id": "cm5wmlkqa000ad3ns36org5zw",
+      "name": "Device 3",
+      "mac": "49:f7:03:26:42:c1",
+      "ip": "208.144.8.183",
+      "tailscaleIp": null,
+      "serialNumber": "ziOureuJsE",
+      "pin": 11,
+      "createdAt": "2025-01-14T15:26:37.618Z",
+      "updatedAt": "2025-01-14T15:46:42.038Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    },
+    {
+      "id": "cm5wmlkqe000cd3nsxpj0029u",
+      "name": "Device 4",
+      "mac": "d5:d2:e4:e1:f4:8b",
+      "ip": "180.77.48.168",
+      "tailscaleIp": null,
+      "serialNumber": "BDSppSavZc",
+      "pin": 12,
+      "createdAt": "2025-01-14T15:26:37.623Z",
+      "updatedAt": "2025-01-14T15:46:45.258Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    },
+    {
+      "id": "cm5wmlkq50008d3nsh7y2gh1h",
+      "name": "Device 2",
+      "mac": "bd:b4:66:a8:3b:81",
+      "ip": "15.230.22.126",
+      "tailscaleIp": null,
+      "serialNumber": "mQGpuXcLBy",
+      "pin": 13,
+      "createdAt": "2025-01-14T15:26:37.614Z",
+      "updatedAt": "2025-01-14T15:46:48.425Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    },
+    {
+      "id": "cm5wmlkpz0006d3ns4ls8ji24",
+      "name": "Device 1",
+      "mac": "fc:c6:e1:77:98:31",
+      "ip": "99.119.55.67",
+      "tailscaleIp": null,
+      "serialNumber": "jpGsuoeuty",
+      "pin": 1,
+      "createdAt": "2025-01-14T15:26:37.608Z",
+      "updatedAt": "2025-01-14T15:36:53.732Z",
+      "locationId": "cm5wmlkpp0002d3ns3j306krs",
+      "deviceTypeId": "cctv",
+      "controllerId": "cm5wmlkpu0004d3ns31v1zv9q"
+    }
+  ]
+}
