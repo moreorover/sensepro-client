@@ -6,7 +6,7 @@ REMOTE_USER="pi"
 REMOTE_DIR="/home/pi/dev/sensepro-client"
 
 # Clear the remote directory before uploading
-ssh ${REMOTE_USER}@${REMOTE_HOST} "rm -rf ${REMOTE_DIR}/.* ${REMOTE_DIR}/*"
+ssh ${REMOTE_USER}@${REMOTE_HOST} "find ${REMOTE_DIR} -mindepth 1 ! -name 'venv' -exec rm -rf {} +"
 
 # Generate an rsync exclude file from .gitignore
 # Filter all ignored files, including untracked ones

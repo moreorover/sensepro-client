@@ -6,9 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: controller
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
     env_file:
       - .env.local
     devices:
-      - "/dev/gpiomem:/dev/gpiomem" # Allow GPIO access
+      - "/dev/gpiomem:/dev/gpiomem"
     volumes:
+      - /sys/class/gpio:/sys/class/gpio
       - ./logs:/app/logs  # Map logs folder in container to host
