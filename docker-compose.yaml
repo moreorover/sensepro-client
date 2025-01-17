@@ -10,3 +10,5 @@ services:
       - .env.local
     devices:
       - "/dev/gpiomem:/dev/gpiomem" # Allow GPIO access
+    volumes:
+      - ./logs:/app/logs  # Map logs folder in container to host

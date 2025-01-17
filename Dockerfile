@@ -13,6 +13,8 @@ ENV RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 # Set the working directory in the container
 WORKDIR /app
 
+RUN mkdir -p logs
+
 # Copy the requirements file into the container
 COPY requirements.txt ./
 
