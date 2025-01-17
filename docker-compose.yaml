@@ -10,4 +10,3 @@ services:
       - .env.local
     devices:
       - "/dev/gpiomem:/dev/gpiomem" # Allow GPIO access
-    restart: unless-stopped

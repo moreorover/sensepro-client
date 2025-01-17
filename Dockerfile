@@ -23,4 +23,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Define the command to run the application
-CMD ["python", "serial_number_container.py"]
+CMD ["python", "main.py"]
