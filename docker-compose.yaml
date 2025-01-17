@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  controller:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: controller
+    env_file:
+      - .env.local
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem" # Allow GPIO access
+    restart: unless-stopped

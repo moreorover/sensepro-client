@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  controller:
+    image: ghcr.io/moreorover/sensepro-client:${VERSION:-latest}
+    container_name: controller
+    environment:
+      - CONTROLLER_ID=${CONTROLLER_ID}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem" # Allow GPIO access
+    restart: unless-stopped

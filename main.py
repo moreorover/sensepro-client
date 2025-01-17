@@ -1,25 +1,46 @@
-import os
 import json
-import uuid
-import pika
 import logging
+import os
+import pika
+import sys
+import uuid
 from gpiozero import Button
 
-CONFIG_FILE = "config.json"
+CONTROLLER_ID = os.getenv("CONTROLLER_ID")
+RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
+RABBITMQ_USER = os.getenv("RABBITMQ_USER")
+RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
 
-# Configure logging
-# logging.basicConfig(
-#     filename="controller.log",
-#     level=logging.INFO,
-#     format="%(asctime)s - %(levelname)s - %(message)s"
-# )
+# Check if the variable is set
+if not CONTROLLER_ID:
+    print("Error: The CONTROLLER_ID environment variable is not set.", file=sys.stderr)
+    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+
+# Check if the variable is set
+if not RABBITMQ_HOST:
+    print("Error: The RABBITMQ_HOST environment variable is not set.", file=sys.stderr)
+    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+
+# Check if the variable is set
+if not RABBITMQ_USER:
+    print("Error: The RABBITMQ_USER environment variable is not set.", file=sys.stderr)
+    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+
+# Check if the variable is set
+if not RABBITMQ_PASSWORD:
+    print("Error: The RABBITMQ_PASSWORD environment variable is not set.", file=sys.stderr)
+    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+
+print(f"CONTROLLER_ID: {CONTROLLER_ID}")
+
+CONFIG_FILE = "config.json"
 
 # Configure logging to file and console
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("controller.log"),
+        logging.FileHandler("logs/controller.log"),
         logging.StreamHandler()  # This adds console output
     ]
 )
@@ -32,16 +53,12 @@ def get_mac_address():
 
 # Function to get serial number
 def get_serial_number():
-    try:
-        with open("/proc/cpuinfo", "r") as f:
-            for line in f:
-                if line.startswith("Serial"):
-                    serial_number = line.strip().split(":")[1].strip()
-                    logging.info(f"Retrieved Serial Number: {serial_number}")
-                    return serial_number
-    except Exception as e:
-        logging.error(f"Failed to retrieve serial number: {e}")
-        return "0000000000000000"
+    with open("/proc/cpuinfo", "r") as f:
+        for line in f:
+            if line.startswith("Serial"):
+                serial_number = line.strip().split(":")[1].strip()
+                logging.info(f"Retrieved Serial Number: {serial_number}")
+                return serial_number
 
 # Function to load configuration
 def load_config():
@@ -68,9 +85,9 @@ def setup_gpio_pins(devices):
         if "pin" in device and device["pin"] is not None:
             pin = device["pin"]
             if pin not in led_pins:
-                # led_pins[pin] = Button(pin, pull_up=True)
+                led_pins[pin] = Button(pin, pull_up=True)
                 logging.info(f"Set up pin {pin} as Button")
-            # led_pins[pin].close()  # Ensure it's off initially
+            led_pins[pin].close()  # Ensure it's off initially
 
 # Function to process RabbitMQ message
 def process_message(channel, method, properties, body):
@@ -82,9 +99,8 @@ def process_message(channel, method, properties, body):
     logging.info(f"Set up {len(devices)} devices based on new configuration")
 
 def main():
-    mac_address = get_mac_address()
     serial_number = get_serial_number()
-    logging.info(f"Starting controller with MAC Address: {mac_address}, Serial Number: {serial_number}")
+    logging.info(f"Starting controller with Serial Number: {serial_number}")
 
     # Load existing config or proceed without stopping
     config = load_config()
@@ -94,13 +110,8 @@ def main():
     else:
         logging.info("Waiting for configuration via RabbitMQ...")
 
-    # RabbitMQ connection settings
-    rabbitmq_host = "localhost"
-    rabbitmq_username = "user"
-    rabbitmq_password = "password"
-
-    credentials = pika.PlainCredentials(rabbitmq_username, rabbitmq_password)
-    connection_params = pika.ConnectionParameters(host=rabbitmq_host, credentials=credentials)
+    credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
+    connection_params = pika.ConnectionParameters(host=RABBITMQ_HOST, credentials=credentials)
     connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
 
