@@ -1,0 +1,20 @@
+[Unit]
+Description=SensePro Controller Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/sensepro_controller
+Restart=always
+Environment=CONTROLLER_ID=
+Environment=RABBITMQ_HOST=sensepro-server-dev
+Environment=RABBITMQ_USER=
+Environment=RABBITMQ_PASSWORD=
+WorkingDirectory=/usr/local/bin
+User=pi
+Group=pi
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=sensepro_controller_service
+
+[Install]
+WantedBy=multi-user.target

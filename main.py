@@ -5,6 +5,18 @@ import pika
 import sys
 import uuid
 from gpiozero import Button
+from logging.handlers import TimedRotatingFileHandler
+
+# Configure logging
+LOG_FILE = os.getenv("LOG_FILE", "/var/log/sensepro_controller.log")
+logger = logging.getLogger("sensepro_controller")
+logger.setLevel(logging.INFO)
+
+# Create a rotating file handler (rotates every 7 days)
+handler = TimedRotatingFileHandler(LOG_FILE, when="D", interval=7, backupCount=4)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 CONTROLLER_ID = os.getenv("CONTROLLER_ID")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
@@ -13,37 +25,27 @@ RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
 
 # Check if the variable is set
 if not CONTROLLER_ID:
-    print("Error: The CONTROLLER_ID environment variable is not set.", file=sys.stderr)
+    logging.error("Error: The CONTROLLER_ID environment variable is not set.")
     sys.exit(1)  # Exit with a non-zero status code to indicate an error
 
 # Check if the variable is set
 if not RABBITMQ_HOST:
-    print("Error: The RABBITMQ_HOST environment variable is not set.", file=sys.stderr)
+    logging.error("Error: The RABBITMQ_HOST environment variable is not set.")
     sys.exit(1)  # Exit with a non-zero status code to indicate an error
 
 # Check if the variable is set
 if not RABBITMQ_USER:
-    print("Error: The RABBITMQ_USER environment variable is not set.", file=sys.stderr)
+    logging.error("Error: The RABBITMQ_USER environment variable is not set.")
     sys.exit(1)  # Exit with a non-zero status code to indicate an error
 
 # Check if the variable is set
 if not RABBITMQ_PASSWORD:
-    print("Error: The RABBITMQ_PASSWORD environment variable is not set.", file=sys.stderr)
+    logging.error("Error: The RABBITMQ_PASSWORD environment variable is not set.")
     sys.exit(1)  # Exit with a non-zero status code to indicate an error
 
 print(f"CONTROLLER_ID: {CONTROLLER_ID}")
 
 CONFIG_FILE = "config.json"
-
-# Configure logging to file and console
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("logs/controller.log"),
-        logging.StreamHandler()  # This adds console output
-    ]
-)
 
 # Function to get MAC address
 def get_mac_address():
