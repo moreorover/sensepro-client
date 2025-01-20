@@ -24,6 +24,11 @@ RABBITMQ_USER = os.getenv("RABBITMQ_USER")
 RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
 
 # Check if the variable is set
+if not LOG_FILE:
+    logging.error("Error: The LOG_FILE environment variable is not set.")
+    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+
+# Check if the variable is set
 if not CONTROLLER_ID:
     logging.error("Error: The CONTROLLER_ID environment variable is not set.")
     sys.exit(1)  # Exit with a non-zero status code to indicate an error
