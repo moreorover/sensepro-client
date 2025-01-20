@@ -13,13 +13,7 @@ mq_host="sensepro-server-dev"
 mq_user=""
 mq_password=""
 
-# Step 1: Ensure pyinstaller is installed
-if ! command -v pyinstaller &> /dev/null; then
-    echo "[INFO] Installing PyInstaller..."
-    pip install pyinstaller || { echo "[ERROR] Failed to install PyInstaller."; exit 1; }
-fi
-
- Step 4: Ensure the log file exists
+# Step 4: Ensure the log file exists
 echo "[INFO] Ensuring log file exists at $LOG_FILE..."
 sudo mkdir -p "$INSTALL_DIR"/logs
 sudo touch "$LOG_FILE"
