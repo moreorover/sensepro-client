@@ -3,7 +3,7 @@ Description=SensePro Controller Service
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/sensepro_controller
+ExecStart=/opt/sensepro-controller/venv/bin/python /opt/sensepro-controller/main.py
 Restart=always
 Environment=CONTROLLER_ID=
 Environment=RABBITMQ_HOST=sensepro-server-dev

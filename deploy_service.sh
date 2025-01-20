@@ -1,12 +1,10 @@
 #!/bin/bash
 
 # Variables
-SCRIPT_NAME="main.py"
-BINARY_NAME="sensepro-controller"
 SERVICE_NAME="sensepro-controller.service"
-INSTALL_DIR="/usr/local/bin"
+INSTALL_DIR="/opt/sensepro-controller"
 SERVICE_DIR="/etc/systemd/system"
-LOG_FILE="/var/log/sensepro-controller.log"
+LOG_FILE="/opt/sensepro-controller/logs/sensepro-controller.log"
 
 controller_id="00000000000"
 
@@ -21,18 +19,11 @@ if ! command -v pyinstaller &> /dev/null; then
     pip install pyinstaller || { echo "[ERROR] Failed to install PyInstaller."; exit 1; }
 fi
 
-# Step 2: Build the binary
-echo "[INFO] Building binary with PyInstaller..."
-pyinstaller --onefile "$SCRIPT_NAME" --name "$BINARY_NAME" || { echo "[ERROR] Failed to build binary."; exit 1; }
-
-# Step 3: Move binary to the install directory
-echo "[INFO] Moving binary to $INSTALL_DIR..."
-sudo mv "dist/$BINARY_NAME" "$INSTALL_DIR" || { echo "[ERROR] Failed to move binary."; exit 1; }
-
-# Step 4: Ensure the log file exists
+ Step 4: Ensure the log file exists
 echo "[INFO] Ensuring log file exists at $LOG_FILE..."
+sudo mkdir -p "$INSTALL_DIR"/logs
 sudo touch "$LOG_FILE"
-sudo chown pi:pi "$LOG_FILE"
+sudo chown -R pi:pi "$INSTALL_DIR"
 sudo chmod 600 "$LOG_FILE"
 
 # Step 5: Create or update the service file
@@ -43,7 +34,7 @@ Description=SensePro Controller Service
 After=network.target
 
 [Service]
-ExecStart=$INSTALL_DIR/$BINARY_NAME
+ExecStart=${INSTALL_DIR}/venv/bin/python ${INSTALL_DIR}/main.py
 Restart=always
 Environment="CONTROLLER_ID=${controller_id}"
 Environment="RABBITMQ_HOST=${mq_host}"

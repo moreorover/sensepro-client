@@ -8,7 +8,7 @@ from gpiozero import Button
 from logging.handlers import TimedRotatingFileHandler
 
 # Configure logging
-LOG_FILE = os.getenv("LOG_FILE", "/var/log/sensepro_controller.log")
+LOG_FILE = os.getenv("LOG_FILE")
 logger = logging.getLogger("sensepro_controller")
 logger.setLevel(logging.INFO)
 
