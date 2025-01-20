@@ -15,7 +15,7 @@ mq_password=""
 
 echo "[INFO] Ensuring python3-rpi.gpio is installed..."
 #sudo apt-get install python3-rpi.gpio
-sudo apt-get install python3-gpiozero python3-pika
+sudo apt-get install -y python3-gpiozero python3-pika python3-systemd
 
 # Step 4: Ensure the log file exists
 echo "[INFO] Ensuring log file exists at $LOG_FILE..."
@@ -42,8 +42,8 @@ Environment="LOG_FILE=${LOG_FILE}"
 WorkingDirectory=$INSTALL_DIR
 User=pi
 Group=pi
-StandardOutput=syslog
-StandardError=syslog
+#StandardOutput=append:${LOG_FILE}
+#StandardError=append:${LOG_FILE}
 SyslogIdentifier=sensepro_controller_service
 
 [Install]

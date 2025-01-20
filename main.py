@@ -6,6 +6,7 @@ import sys
 import uuid
 from gpiozero import Button
 from logging.handlers import TimedRotatingFileHandler
+from systemd.journal import JournalHandler
 
 # Configure logging
 LOG_FILE = os.getenv("LOG_FILE")
@@ -13,10 +14,19 @@ logger = logging.getLogger("sensepro_controller")
 logger.setLevel(logging.INFO)
 
 # Create a rotating file handler (rotates every 7 days)
-handler = TimedRotatingFileHandler(LOG_FILE, when="D", interval=7, backupCount=4)
+handler = TimedRotatingFileHandler(LOG_FILE, when="midnight", interval=1, backupCount=7)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+# Journal handler for logging to system journal
+try:
+    journal_handler = JournalHandler()
+    journal_formatter = logging.Formatter('%(message)s')
+    journal_handler.setFormatter(journal_formatter)
+    logger.addHandler(journal_handler)
+except Exception as e:
+    print(f"Error setting up journal logging: {e}", file=sys.stderr)
 
 CONTROLLER_ID = os.getenv("CONTROLLER_ID")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
@@ -48,7 +58,7 @@ if not RABBITMQ_PASSWORD:
     logging.error("Error: The RABBITMQ_PASSWORD environment variable is not set.")
     sys.exit(1)  # Exit with a non-zero status code to indicate an error
 
-print(f"CONTROLLER_ID: {CONTROLLER_ID}")
+logging.info(f"CONTROLLER_ID: {CONTROLLER_ID}")
 
 CONFIG_FILE = "config.json"
 
