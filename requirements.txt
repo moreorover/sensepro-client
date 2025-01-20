@@ -1,4 +1,4 @@
 gpiozero
 pika
 pika-stubs
-pyinstaller
+rpi.gpio

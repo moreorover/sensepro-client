@@ -13,6 +13,10 @@ mq_host="sensepro-server-dev"
 mq_user=""
 mq_password=""
 
+echo "[INFO] Ensuring python3-rpi.gpio is installed..."
+#sudo apt-get install python3-rpi.gpio
+sudo apt-get install python3-gpiozero python3-pika
+
 # Step 4: Ensure the log file exists
 echo "[INFO] Ensuring log file exists at $LOG_FILE..."
 sudo mkdir -p "$INSTALL_DIR"/logs
@@ -28,7 +32,7 @@ Description=SensePro Controller Service
 After=network.target
 
 [Service]
-ExecStart=${INSTALL_DIR}/venv/bin/python ${INSTALL_DIR}/main.py
+ExecStart=/usr/bin/python ${INSTALL_DIR}/main.py
 Restart=always
 Environment="CONTROLLER_ID=${controller_id}"
 Environment="RABBITMQ_HOST=${mq_host}"
