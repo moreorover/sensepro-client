@@ -10,7 +10,7 @@ from systemd.journal import JournalHandler
 # Journal handler for system journal
 handler = JournalHandler()
 handler.setFormatter(logging.Formatter('%(message)s'))
-logger = logging.getLogger()
+logger = logging.getLogger('SenseProController')
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
