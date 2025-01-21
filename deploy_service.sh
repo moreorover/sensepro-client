@@ -11,8 +11,13 @@ echo "[INFO] Device Serial Number: ${serial}"
 
 # RabbitMQ-related environment variables
 mq_host="sensepro-server-dev"
-mq_user=""
-mq_password=""
+RABBITMQ_USER="${RABBITMQ_USER:-}"  # Default to empty if not set
+RABBITMQ_PASSWORD="${RABBITMQ_PASSWORD:-}"  # Default to empty if not set
+
+if [ -z "$RABBITMQ_USER" ] || [ -z "$RABBITMQ_PASSWORD" ]; then
+  echo "[ERROR] RabbitMQ credentials are not provided. Exiting."
+  exit 1
+fi
 
 echo "[INFO] Ensuring python3-rpi.gpio is installed..."
 #sudo apt-get install python3-rpi.gpio
@@ -29,8 +34,8 @@ After=network.target
 ExecStart=/usr/bin/python ${INSTALL_DIR}/main.py
 Restart=always
 Environment="RABBITMQ_HOST=${mq_host}"
-Environment="RABBITMQ_USER=${mq_user}"
-Environment="RABBITMQ_PASSWORD=${mq_password}"
+Environment="RABBITMQ_USER=${RABBITMQ_USER}"
+Environment="RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}"
 WorkingDirectory=$INSTALL_DIR
 User=pi
 Group=pi
