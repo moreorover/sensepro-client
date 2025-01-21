@@ -4,7 +4,6 @@
 SERVICE_NAME="sensepro-controller.service"
 INSTALL_DIR="/opt/sensepro-controller"
 SERVICE_DIR="/etc/systemd/system"
-LOG_FILE="/opt/sensepro-controller/logs/sensepro-controller.log"
 
 controller_id="00000000000"
 
@@ -16,13 +15,6 @@ mq_password=""
 echo "[INFO] Ensuring python3-rpi.gpio is installed..."
 #sudo apt-get install python3-rpi.gpio
 sudo apt-get install -y python3-gpiozero python3-pika python3-systemd
-
-# Step 4: Ensure the log file exists
-echo "[INFO] Ensuring log file exists at $LOG_FILE..."
-sudo mkdir -p "$INSTALL_DIR"/logs
-sudo touch "$LOG_FILE"
-sudo chown -R pi:pi "$INSTALL_DIR"
-sudo chmod 600 "$LOG_FILE"
 
 # Step 5: Create or update the service file
 echo "[INFO] Creating/updating systemd service file..."
@@ -38,13 +30,12 @@ Environment="CONTROLLER_ID=${controller_id}"
 Environment="RABBITMQ_HOST=${mq_host}"
 Environment="RABBITMQ_USER=${mq_user}"
 Environment="RABBITMQ_PASSWORD=${mq_password}"
-Environment="LOG_FILE=${LOG_FILE}"
 WorkingDirectory=$INSTALL_DIR
 User=pi
 Group=pi
-#StandardOutput=append:${LOG_FILE}
-#StandardError=append:${LOG_FILE}
-SyslogIdentifier=sensepro_controller_service
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=SenseProController
 
 [Install]
 WantedBy=multi-user.target
