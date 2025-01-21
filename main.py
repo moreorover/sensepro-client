@@ -8,9 +8,9 @@ from gpiozero import Button
 from systemd.journal import JournalHandler
 
 # Journal handler for system journal
-handler = JournalHandler()
+handler = JournalHandler(SYSLOG_IDENTIFIER="SenseProController")
 handler.setFormatter(logging.Formatter('%(message)s'))
-logger = logging.getLogger('SenseProController')
+logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
