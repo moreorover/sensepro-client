@@ -101,7 +101,7 @@ def main():
         logger.info("Waiting for configuration via RabbitMQ...")
 
     credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
-    connection_params = pika.ConnectionParameters(host=RABBITMQ_HOST, credentials=credentials)
+    connection_params = pika.ConnectionParameters(host=RABBITMQ_HOST, credentials=credentials, heartbeat=30)
     connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
 
