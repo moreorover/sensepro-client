@@ -54,8 +54,8 @@ jobs:
           RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
           RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
         run: |
-          ssh "pi@raspberrypi" "mkdir -p /tmp/sensepro-controller-${{ github.sha }}"
+          ssh "pi@raspberrypi" "mkdir -p /opt/sensepro-controller"
           scp dist/sensepro-controller-${{ github.sha }}.tar.gz pi@raspberrypi:/tmp
           ssh "pi@raspberrypi" "tar -xzf /tmp/sensepro-controller-${{ github.sha }}.tar.gz -C /opt/sensepro-controller"
-          ssh "pi@raspberrypi" "RABBITMQ_USER=$RABBITMQ_USER RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD bash /tmp/sensepro-controller-${{ github.sha }}/deploy_service.sh"
-          ssh "pi@raspberrypi" "rm -rf /tmp/sensepro-controller-${{ github.sha }} /tmp/sensepro-controller-${{ github.sha }}.tar.gz"
+          ssh "pi@raspberrypi" "RABBITMQ_USER=$RABBITMQ_USER RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD bash /opt/sensepro-controller/deploy_service.sh"
+          ssh "pi@raspberrypi" "rm -rf /tmp/sensepro-controller-${{ github.sha }}.tar.gz"
