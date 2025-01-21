@@ -4,6 +4,8 @@ import os
 import pika
 import sys
 import uuid
+import threading
+import time
 from gpiozero import Button
 from systemd.journal import JournalHandler
 
@@ -18,20 +20,17 @@ RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
 RABBITMQ_USER = os.getenv("RABBITMQ_USER")
 RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
 
-# Check if the variable is set
 if not RABBITMQ_HOST:
     logger.error("Error: The RABBITMQ_HOST environment variable is not set.")
-    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+    sys.exit(1)
 
-# Check if the variable is set
 if not RABBITMQ_USER:
     logger.error("Error: The RABBITMQ_USER environment variable is not set.")
-    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+    sys.exit(1)
 
-# Check if the variable is set
 if not RABBITMQ_PASSWORD:
     logger.error("Error: The RABBITMQ_PASSWORD environment variable is not set.")
-    sys.exit(1)  # Exit with a non-zero status code to indicate an error
+    sys.exit(1)
 
 CONFIG_FILE = "config.json"
 
@@ -88,6 +87,20 @@ def process_message(channel, method, properties, body):
     setup_gpio_pins(devices)
     logger.info(f"Set up {len(devices)} devices based on new configuration")
 
+# Custom heartbeat function
+def send_heartbeat(channel, serial_number):
+    while True:
+        heartbeat_message = {
+            "serial_number": serial_number,
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        try:
+            channel.basic_publish(exchange='', routing_key='heartbeat', body=json.dumps(heartbeat_message))
+            logger.info(f"Sent heartbeat: {heartbeat_message}")
+        except Exception as e:
+            logger.error(f"Failed to send heartbeat: {e}")
+        time.sleep(300)  # Send heartbeat every 30 seconds
+
 def main():
     serial_number = get_serial_number()
     logger.info(f"Starting controller with Serial Number: {serial_number}")
@@ -105,9 +118,16 @@ def main():
     connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
 
+    # Declare the heartbeat queue
+    channel.queue_declare(queue='heartbeat')
+
     queue_name = f"controller-{serial_number}"
     channel.queue_declare(queue=queue_name)
     logger.info(f"Listening for messages on queue: {queue_name}")
+
+    # Start heartbeat thread
+    heartbeat_thread = threading.Thread(target=send_heartbeat, args=(channel, serial_number), daemon=True)
+    heartbeat_thread.start()
 
     try:
         channel.basic_consume(queue=queue_name, on_message_callback=process_message, auto_ack=True)
