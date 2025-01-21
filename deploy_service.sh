@@ -5,7 +5,9 @@ SERVICE_NAME="sensepro-controller.service"
 INSTALL_DIR="/opt/sensepro-controller"
 SERVICE_DIR="/etc/systemd/system"
 
-controller_id="00000000000"
+serial=$(grep Serial /proc/cpuinfo | awk '{print $3}')
+
+echo "[INFO] Device Serial Number: ${serial}"
 
 # RabbitMQ-related environment variables
 mq_host="sensepro-server-dev"
@@ -26,7 +28,6 @@ After=network.target
 [Service]
 ExecStart=/usr/bin/python ${INSTALL_DIR}/main.py
 Restart=always
-Environment="CONTROLLER_ID=${controller_id}"
 Environment="RABBITMQ_HOST=${mq_host}"
 Environment="RABBITMQ_USER=${mq_user}"
 Environment="RABBITMQ_PASSWORD=${mq_password}"

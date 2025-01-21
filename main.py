@@ -14,15 +14,9 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
-CONTROLLER_ID = os.getenv("CONTROLLER_ID")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
 RABBITMQ_USER = os.getenv("RABBITMQ_USER")
 RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
-
-# Check if the variable is set
-if not CONTROLLER_ID:
-    logger.error("Error: The CONTROLLER_ID environment variable is not set.")
-    sys.exit(1)  # Exit with a non-zero status code to indicate an error
 
 # Check if the variable is set
 if not RABBITMQ_HOST:
@@ -38,8 +32,6 @@ if not RABBITMQ_USER:
 if not RABBITMQ_PASSWORD:
     logger.error("Error: The RABBITMQ_PASSWORD environment variable is not set.")
     sys.exit(1)  # Exit with a non-zero status code to indicate an error
-
-logger.info(f"CONTROLLER_ID: {CONTROLLER_ID}")
 
 CONFIG_FILE = "config.json"
 
