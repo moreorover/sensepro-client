@@ -1,4 +1,0 @@
-gpiozero
-pika
-pika-stubs
-rpi.gpio
