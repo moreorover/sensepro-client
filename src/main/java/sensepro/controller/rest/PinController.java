@@ -1,4 +1,4 @@
-package sensepro.controller.rabbitmqintegration;
+package sensepro.controller.rest;
 
 import sensepro.controller.Pins;
 import org.slf4j.Logger;

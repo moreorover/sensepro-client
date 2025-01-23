@@ -1,6 +1,8 @@
-package sensepro.controller.rabbitmqintegration;
+package sensepro.controller.config;
 
 import com.rabbitmq.client.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -15,6 +17,8 @@ import java.util.concurrent.TimeoutException;
 
 @Configuration
 public class RabbitMqConfiguration {
+
+    Logger logger = LoggerFactory.getLogger(RabbitMqConfiguration.class);
 
     @Value("${spring.rabbitmq.host}")
     private String host;
@@ -36,7 +40,7 @@ public class RabbitMqConfiguration {
     }
 
     //    @Value("${spring.rabbitmq.virtual-host}")
-//    private String virtualHost;
+    //    private String virtualHost;
 
     private static final String CONNECTION_FACTORY = "helloRabbitMQConnectionFactory";
 
@@ -55,9 +59,9 @@ public class RabbitMqConfiguration {
     private void createQueue(ConnectionFactory connectionFactory) {
         try (Connection connection = connectionFactory.createConnection();
              Channel channel = connection.createChannel(true)) {
-            channel.queueDeclare("hello_queue", true, false, false, Map.of("x-max-length", 5000));
+            channel.queueDeclare(queue, true, false, false, Map.of("x-max-length", 5000));
         } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 

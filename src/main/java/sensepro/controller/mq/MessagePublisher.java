@@ -1,10 +1,14 @@
-package sensepro.controller.rabbitmqintegration;
+package sensepro.controller.mq;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MessagePublisher {
+
+    @Value("${spring.rabbitmq.queue}")
+    private String queue;
 
     private final RabbitTemplate rabbitTemplate;
     public MessagePublisher(RabbitTemplate rabbitTemplate) {
@@ -12,6 +16,6 @@ public class MessagePublisher {
     }
 
     public void sendMessage(String message) {
-        rabbitTemplate.convertAndSend("hello_queue", message);
+        rabbitTemplate.convertAndSend(queue, message);
     }
 }

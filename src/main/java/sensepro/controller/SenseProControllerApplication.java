@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-public class MqTesterApplication {
+public class SenseProControllerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MqTesterApplication.class, args);
+        SpringApplication.run(SenseProControllerApplication.class, args);
     }
 
 }
