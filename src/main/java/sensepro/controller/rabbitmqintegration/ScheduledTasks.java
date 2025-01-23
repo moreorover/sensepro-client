@@ -1,4 +1,4 @@
-package com.example.mq_tester.rabbitmqintegration;
+package sensepro.controller.rabbitmqintegration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

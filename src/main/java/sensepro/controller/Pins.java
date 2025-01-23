@@ -1,6 +1,6 @@
-package com.example.mq_tester;
+package sensepro.controller;
 
-import com.example.mq_tester.rabbitmqintegration.MessagePublisher;
+import sensepro.controller.rabbitmqintegration.MessagePublisher;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import com.pi4j.io.gpio.digital.DigitalInput;

@@ -1,4 +1,4 @@
-package com.example.mq_tester;
+package sensepro.controller;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -8,24 +8,11 @@
         <version>3.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>mq_tester</artifactId>
+    <groupId>sensepro</groupId>
+    <artifactId>controller</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mq_tester</name>
-    <description>mq_tester</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <name>controller</name>
+    <description>SensePro Controller</description>
     <properties>
         <java.version>17</java.version>
         <pi4j.version>2.7.0</pi4j.version>

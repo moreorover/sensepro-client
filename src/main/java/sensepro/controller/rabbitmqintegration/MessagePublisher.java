@@ -1,4 +1,4 @@
-package com.example.mq_tester.rabbitmqintegration;
+package sensepro.controller.rabbitmqintegration;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;

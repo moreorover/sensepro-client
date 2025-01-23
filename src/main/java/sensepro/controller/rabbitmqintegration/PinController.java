@@ -1,6 +1,6 @@
-package com.example.mq_tester.rabbitmqintegration;
+package sensepro.controller.rabbitmqintegration;
 
-import com.example.mq_tester.Pins;
+import sensepro.controller.Pins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

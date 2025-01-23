@@ -1,4 +1,4 @@
-package com.example.mq_tester.rabbitmqintegration;
+package sensepro.controller.rabbitmqintegration;
 
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
