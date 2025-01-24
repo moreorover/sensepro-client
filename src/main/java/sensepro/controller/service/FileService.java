@@ -1,4 +1,4 @@
-package sensepro.controller.util;
+package sensepro.controller.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package sensepro.controller.rest;
 
-import sensepro.controller.Pins;
+import sensepro.controller.service.PinService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +15,17 @@ public class PinController {
 
     Logger logger = LoggerFactory.getLogger(PinController.class);
 
-    private final Pins pins;
+    private final PinService pinService;
 
-    public PinController(Pins pins) {
-        this.pins = pins;
+    public PinController(PinService pinService) {
+        this.pinService = pinService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Integer> changePin(@PathVariable int id) {
         logger.info("Changing pin with id {}", id);
-        pins.clearAllPins();
-        pins.configurePin(id);
+        pinService.clearAllPins();
+        pinService.configurePin(id);
         return ResponseEntity.ok(id);
     }
 }

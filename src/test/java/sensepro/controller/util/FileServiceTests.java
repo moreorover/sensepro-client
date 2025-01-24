@@ -4,11 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.junit.jupiter.MockitoExtension;
+import sensepro.controller.model.Config;
+import sensepro.controller.service.FileService;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 public class FileServiceTests {
@@ -51,11 +54,27 @@ public class FileServiceTests {
         assertEquals(person.getName(), readPerson.getName());
     }
 
+    @Test
+    void testReadConfigFile() throws IOException {
+        FileService<Config> fileService = new FileService<>();
+
+        // Resolve the path to the config.json file in the test resources folder
+        String fileName = Path.of("src", "test", "resources", "config.json").toString();
+
+        // Read the content of the config.json file
+        Config config = fileService.readFile(fileName, Config.class);
+
+        // Assertions to validate the content of config.json
+        assertNotNull(config);
+        assertEquals("cm5wmlkpu0004d3ns31v1zv9q", config.controllerId);
+        assertEquals("cm5wmlkpu0004d3ns31v1zv9q", config.controller.id);
+        assertEquals("cm5wmlkqa000ad3ns36org5zw", config.devices.get(0).id);
+    }
+
     static class Person {
         private String id;
         private String name;
 
-        // Getters and setters
         public String getId() {
             return id;
         }

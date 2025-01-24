@@ -1,4 +1,4 @@
-package sensepro.controller;
+package sensepro.controller.service;
 
 import sensepro.controller.mq.MessagePublisher;
 import com.pi4j.Pi4J;
@@ -16,18 +16,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class Pins {
+public class PinServiceImpl implements PinService {
 
-    Logger logger = LoggerFactory.getLogger(Pins.class);
+    Logger logger = LoggerFactory.getLogger(PinServiceImpl.class);
 
     private final MessagePublisher messagePublisher;
     private final Context pi4j;
+    private final FileService<String> fileService;
     private final Map<Integer, DigitalInput> pinMap;
     private final Map<DigitalInput, DigitalStateChangeListener> listenerMap;
 
-    public Pins(MessagePublisher messagePublisher) {
+    public PinServiceImpl(MessagePublisher messagePublisher, FileService<String> fileService) {
         this.messagePublisher = messagePublisher;
         this.pi4j = Pi4J.newAutoContext();
+        this.fileService = fileService;
         this.pinMap = new HashMap<>();
         this.listenerMap = new HashMap<>();
     }
@@ -35,6 +37,7 @@ public class Pins {
     @PostConstruct
     public void initialize() {
         logger.info("Initializing Pins...");
+        String config = fileService.readFile("config.json", String.class);
         configurePin(24);
     }
 
