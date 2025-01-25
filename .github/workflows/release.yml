@@ -38,8 +38,8 @@ jobs:
           #          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}-${{ matrix.environment }}:latest
-            ${{ env.IMAGE_NAME }}-${{ matrix.environment }}:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy-development:
     name: Deploy to development
