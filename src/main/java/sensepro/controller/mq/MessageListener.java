@@ -1,37 +1,56 @@
 package sensepro.controller.mq;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import sensepro.controller.model.Config;
+import sensepro.controller.service.PinService;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.util.Set;
 
+@Slf4j
 @Component
-//@ConditionalOnProperty(
-//        name = "sensepro.server.listener",
-//        havingValue = "true",
-//        matchIfMissing = true // Set to true if you want it to be enabled by default when the property is missing
-//)
 public class MessageListener {
 
-    Logger logger = LoggerFactory.getLogger(MessageListener.class);
+    private final ObjectMapper objectMapper;
+    private final Validator validator;
+    private final PinService pinService;
 
-    @RabbitListener(queues = "#{rabbitMqConfiguration.getQueue()}")
-    public void receiveMessage(String message) {
-        logger.info("Received message: {}", message);
+    public MessageListener(ObjectMapper objectMapper, Validator validator, PinService pinService) {
+        this.objectMapper = objectMapper;
+        this.validator = validator;
+        this.pinService = pinService;
+    }
 
-        Path filePath = Path.of("output.txt");
-
+    @RabbitListener(queues = "#{rabbitMqConfiguration.getControllerQueueName()}")
+    public void receiveMessage(Message message) {
         try {
-            // Write the string to the file (creates the file if it doesn't exist)
-            Files.writeString(filePath, message, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            logger.info("File written successfully!");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            String body = new String(message.getBody());
+            Config config = objectMapper.readValue(body, Config.class);
+
+            // Validate the message
+            Set<ConstraintViolation<Config>> violations = validator.validate(config);
+            if (!violations.isEmpty()) {
+                throw new ConstraintViolationException("Message validation failed", violations);
+            }
+
+            // Process message
+            log.info("Processing message: {}", message.getMessageProperties().getMessageId());
+
+            pinService.configure(config);
+
+            log.info("New configuration processed.");
+            log.info("Message processed: {}", message.getMessageProperties().getMessageId());
+
+        } catch (ConstraintViolationException e) {
+            log.error("Validation error: {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Error processing message: {}", e.getMessage(), e);
         }
     }
 }

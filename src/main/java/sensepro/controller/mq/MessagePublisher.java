@@ -18,4 +18,8 @@ public class MessagePublisher {
     public void sendMessage(String message) {
         rabbitTemplate.convertAndSend(queue, message);
     }
+
+    public void sendMessage(String routingKey, Object object) {
+        rabbitTemplate.convertAndSend(routingKey, object);
+    }
 }

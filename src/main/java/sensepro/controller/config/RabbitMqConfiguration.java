@@ -1,8 +1,7 @@
 package sensepro.controller.config;
 
 import com.rabbitmq.client.Channel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -15,10 +14,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+@Slf4j
 @Configuration
 public class RabbitMqConfiguration {
-
-    Logger logger = LoggerFactory.getLogger(RabbitMqConfiguration.class);
 
     @Value("${spring.rabbitmq.host}")
     private String host;
@@ -32,11 +30,11 @@ public class RabbitMqConfiguration {
     @Value("${spring.rabbitmq.password}")
     private String password;
 
-    @Value("${spring.rabbitmq.queue}")
-    private String queue;
+    @Value("${sensepro.raspberrypi.serial.number}")
+    private String raspberryPiSerialNumber;
 
-    public String getQueue() {
-        return queue;
+    public String getControllerQueueName() {
+        return "controller-" + raspberryPiSerialNumber;
     }
 
     //    @Value("${spring.rabbitmq.virtual-host}")
@@ -59,9 +57,9 @@ public class RabbitMqConfiguration {
     private void createQueue(ConnectionFactory connectionFactory) {
         try (Connection connection = connectionFactory.createConnection();
              Channel channel = connection.createChannel(true)) {
-            channel.queueDeclare(queue, true, false, false, Map.of("x-max-length", 5000));
+            channel.queueDeclare(getControllerQueueName(), true, false, false, Map.of("x-max-length", 1));
         } catch (IOException | TimeoutException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 

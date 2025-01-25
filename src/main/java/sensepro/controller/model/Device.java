@@ -9,7 +9,7 @@ public class Device {
     public String ip;
     public Object tailscaleIp;
     public String serialNumber;
-    public int pin;
+    public Integer pin;
     public Date createdAt;
     public Date updatedAt;
     public String locationId;

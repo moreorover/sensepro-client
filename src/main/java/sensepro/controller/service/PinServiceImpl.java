@@ -1,32 +1,31 @@
 package sensepro.controller.service;
 
+import com.pi4j.io.gpio.digital.*;
+import lombok.extern.slf4j.Slf4j;
+import sensepro.controller.model.Config;
+import sensepro.controller.model.Device;
 import sensepro.controller.mq.MessagePublisher;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
-import com.pi4j.io.gpio.digital.DigitalInput;
-import com.pi4j.io.gpio.digital.DigitalState;
-import com.pi4j.io.gpio.digital.DigitalStateChangeListener;
-import com.pi4j.io.gpio.digital.PullResistance;
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+@Slf4j
 @Component
 public class PinServiceImpl implements PinService {
 
-    Logger logger = LoggerFactory.getLogger(PinServiceImpl.class);
-
     private final MessagePublisher messagePublisher;
-    private final Context pi4j;
-    private final FileService<String> fileService;
+    private Context pi4j;
+    private final FileService<Config> fileService;
     private final Map<Integer, DigitalInput> pinMap;
     private final Map<DigitalInput, DigitalStateChangeListener> listenerMap;
 
-    public PinServiceImpl(MessagePublisher messagePublisher, FileService<String> fileService) {
+    public PinServiceImpl(MessagePublisher messagePublisher, FileService<Config> fileService) {
         this.messagePublisher = messagePublisher;
         this.pi4j = Pi4J.newAutoContext();
         this.fileService = fileService;
@@ -36,9 +35,39 @@ public class PinServiceImpl implements PinService {
 
     @PostConstruct
     public void initialize() {
-        logger.info("Initializing Pins...");
-        String config = fileService.readFile("config.json", String.class);
-        configurePin(24);
+        log.info("Initializing Pins...");
+        Config config;
+        try {
+            config = fileService.readFile("config.json", Config.class);
+            log.info("Successfully read config.json");
+        } catch (FileServiceException e) {
+            log.error(e.getMessage());
+            config = null;
+        }
+
+        if (config == null) {
+            log.warn("No config.json found. Waiting for initial configuration from MQ Server...");
+            messagePublisher.sendMessage("server-notifications", "No config.json found.");
+            return;
+        }
+
+        configure(config);
+    }
+
+    public void configure(Config config) {
+        clearAllPins();
+        if (config.devices.isEmpty()) {
+            log.warn("No devices found. Waiting for initial configuration from MQ Server...");
+            return;
+        }
+
+//        pi4j.registry().all().forEach((id, io) -> log.info("Registered IO: {}", id));
+
+        for (Device device : config.devices) {
+            if (device.pin != null) {
+                configurePin(device.pin);
+            }
+        }
     }
 
     public void configurePin(int pin) {
@@ -59,7 +88,7 @@ public class PinServiceImpl implements PinService {
 
         pinMap.put(pin, button);
         listenerMap.put(button, listener);
-        logger.info("Configured button on pin {}", pin);
+        log.info("Configured button on pin {}", pin);
     }
 
     public void clearPin(int pin) {
@@ -69,30 +98,39 @@ public class PinServiceImpl implements PinService {
             if (listener != null) {
                 button.removeListener(listener);
                 listenerMap.remove(button);
-                logger.info("Removed listener from button on pin {}", pin);
+                log.info("Removed listener from button on pin {}", pin);
             }
+            log.info("Button id: {}", button.getId());
+//            pi4j.registry().remove(button.id());
+            // Release the pin at the OS level (using GpioD if required)
+            // Use gpioset to release the pin at the OS level
+//            try {
+//                String command = String.format("gpioset -r gpiochip0 %d=0", pin);
+//                Process process = Runtime.getRuntime().exec(command);
+//                int exitCode = process.waitFor();
+//                if (exitCode != 0) {
+//                    log.warn("Failed to release GPIO pin {} at OS level. Exit code: {}", pin, exitCode);
+//                } else {
+//                    log.info("Released GPIO pin {} at OS level.", pin);
+//                }
+//            } catch (Exception e) {
+//                log.error("Error while releasing GPIO pin {}: {}", pin, e.getMessage());
+//            }
             button.shutdown(pi4j);
             pinMap.remove(pin);
-            logger.info("Cleared configuration for pin {}", pin);
+            log.info("Cleared configuration for pin {}", pin);
         } else {
-            logger.warn("No configuration found for pin {}. Skipping clear operation.", pin);
+            log.warn("No configuration found for pin {}. Skipping clear operation.", pin);
         }
     }
 
     public void clearAllPins() {
-        for (Map.Entry<Integer, DigitalInput> entry : pinMap.entrySet()) {
-            int pin = entry.getKey();
-            DigitalInput button = entry.getValue();
-            DigitalStateChangeListener listener = listenerMap.get(button);
-            if (listener != null) {
-                button.removeListener(listener);
-                logger.info("Removed listener from button on pin {}", pin);
-            }
-            button.shutdown(pi4j);
-            logger.info("Cleared configuration for pin {}", pin);
+        Set<Integer> pins = new HashSet<>(pinMap.keySet());
+        for (int pin : pins) {
+            clearPin(pin); // Reuse clearPin method
         }
-        pinMap.clear();
-        listenerMap.clear();
-        logger.info("All GPIO pins have been cleared.");
+        pi4j.shutdown();
+        pi4j = Pi4J.newAutoContext();
+        log.info("All GPIO pins have been cleared.");
     }
 }

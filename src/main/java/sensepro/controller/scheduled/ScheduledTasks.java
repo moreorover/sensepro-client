@@ -1,17 +1,15 @@
 package sensepro.controller.scheduled;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import sensepro.controller.mq.MessagePublisher;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Component
 public class ScheduledTasks {
-
-    Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
 
     private final MessagePublisher messagePublisher;
 
@@ -23,7 +21,7 @@ public class ScheduledTasks {
     public void task1() {
         LocalDateTime now = LocalDateTime.now();
         // Task logic goes here
-        logger.info("Task 1 executed at {}", now);
+        log.info("Task 1 executed at {}", now);
         messagePublisher.sendMessage("message: " + now);
     }
 }
