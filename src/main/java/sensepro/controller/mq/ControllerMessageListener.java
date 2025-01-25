@@ -16,14 +16,14 @@ import java.util.Set;
 
 @Slf4j
 @Component
-public class MessageListener {
+public class ControllerMessageListener {
 
     private final ObjectMapper objectMapper;
     private final Validator validator;
     private final PinService pinService;
     private final FileService<Config> fileService;
 
-    public MessageListener(ObjectMapper objectMapper, Validator validator, PinService pinService, FileService<Config> fileService) {
+    public ControllerMessageListener(ObjectMapper objectMapper, Validator validator, PinService pinService, FileService<Config> fileService) {
         this.objectMapper = objectMapper;
         this.validator = validator;
         this.pinService = pinService;

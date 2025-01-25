@@ -80,7 +80,8 @@ public class PinServiceImpl implements PinService {
         var button = pi4j.create(buttonConfig);
         DigitalStateChangeListener listener = e -> {
             if (e.state() == DigitalState.LOW) {
-                messagePublisher.sendMessage("Button on pin " + pin + " was pressed");
+//                messagePublisher.sendMessage("Button on pin " + pin + " was pressed");
+                log.info("Button on pin {} was pressed", pin);
             }
         };
 

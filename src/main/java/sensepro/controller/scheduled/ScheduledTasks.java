@@ -22,6 +22,6 @@ public class ScheduledTasks {
         LocalDateTime now = LocalDateTime.now();
         // Task logic goes here
         log.info("Task 1 executed at {}", now);
-        messagePublisher.sendMessage("message: " + now);
+        messagePublisher.sendMessage("system", "message: " + now);
     }
 }

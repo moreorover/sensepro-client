@@ -50,14 +50,24 @@ public class RabbitMqConfiguration {
         connectionFactory.setUsername(username);
         connectionFactory.setPassword(password);
 //        connectionFactory.setVirtualHost(virtualHost);
-        createQueue(connectionFactory);
+        createControllerQueue(connectionFactory);
+        createSystemQueue(connectionFactory);
         return connectionFactory;
     }
 
-    private void createQueue(ConnectionFactory connectionFactory) {
+    private void createControllerQueue(ConnectionFactory connectionFactory) {
         try (Connection connection = connectionFactory.createConnection();
              Channel channel = connection.createChannel(true)) {
             channel.queueDeclare(getControllerQueueName(), true, false, false, Map.of("x-max-length", 1));
+        } catch (IOException | TimeoutException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void createSystemQueue(ConnectionFactory connectionFactory) {
+        try (Connection connection = connectionFactory.createConnection();
+             Channel channel = connection.createChannel(true)) {
+            channel.queueDeclare("system", true, false, false, Map.of());
         } catch (IOException | TimeoutException e) {
             log.error(e.getMessage());
         }
