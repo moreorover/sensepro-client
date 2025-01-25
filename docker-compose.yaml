@@ -1,18 +1,24 @@
-version: "3.8"
-
 services:
   controller:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: controller
-    cap_add:
-      - SYS_RAWIO
-      - SYS_ADMIN
-    env_file:
-      - .env.local
+    privileged: true
     devices:
-      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/mem:/dev/mem"        # Access to system memory
+      - "/dev/gpiomem:/dev/gpiomem" # Access to GPIO memory
+    environment:
+      RABBITMQ_USERNAME: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RASPBERRY_PI_SERIAL: ${RASPBERRY_PI_SERIAL}
+    ports:
+      - "8080:8080"
     volumes:
-      - /sys/class/gpio:/sys/class/gpio
-      - ./logs:/app/logs  # Map logs folder in container to host
+      - /sys/class/gpio:/sys/class/gpio # Access to GPIO sysfs
+      - controller_data:/app
+    restart: always
+
+volumes:
+  controller_data:
+    driver: local

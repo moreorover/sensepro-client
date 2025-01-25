@@ -1,28 +1,27 @@
-# Use an official Python runtime as the base image
-FROM python:3.13-slim
+# Stage 1: Build the application
+FROM maven:3.9.4-eclipse-temurin-17 AS build
 
-ARG CONTROLLER_ID
-ENV CONTROLLER_ID=${CONTROLLER_ID}
-ARG RABBITMQ_HOST
-ENV RABBITMQ_HOST=${RABBITMQ_HOST}
-ARG RABBITMQ_USER
-ENV RABBITMQ_USER=${RABBITMQ_USER}
-ARG RABBITMQ_PASSWORD
-ENV RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
-
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-RUN mkdir -p logs
+# Copy Maven project files to the container
+COPY pom.xml .
+COPY src ./src
 
-# Copy the requirements file into the container
-COPY requirements.txt ./
+# Build the Spring Boot application
+RUN mvn clean package -DskipTests
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Stage 2: Run the application
+FROM openjdk:17-jdk-slim
 
-# Copy the rest of the application code
-COPY . .
+# Set working directory
+WORKDIR /app
 
-# Define the command to run the application
-CMD ["python", "main.py"]
+# Copy the JAR file from the build stage
+COPY --from=build /app/target/controller-*.jar app.jar
+
+# Expose the application's port
+EXPOSE 8080
+
+# Set the entry point to run the Spring Boot application
+ENTRYPOINT ["java", "-jar", "app.jar"]
