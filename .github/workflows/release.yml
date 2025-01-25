@@ -35,7 +35,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64,linux/arm/v8
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:latest
@@ -51,9 +51,6 @@ jobs:
     timeout-minutes: 30
     env:
       VERSION: ${{ github.sha }}
-      RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
-      RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
-      RASPBERRY_PI_SERIAL: 100000008dc88c30
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -80,19 +77,19 @@ jobs:
       - name: Test SSH Connection
         run: ssh -o ConnectTimeout=30 "pi@raspberrypi" "echo 'SSH connection successful!'"
 
+      - name: Create .env file
+        run: |
+          echo "RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}" > .env
+          echo "RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}" >> .env
+          echo "RASPBERRY_PI_SERIAL=$(cat /proc/cpuinfo | grep Serial | awk '{print $3}')" >> .env
+
       # Copy the compose file and script to the remote server
       - name: Copy files to the remote server
-        env:
-         RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
-         RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
         run: |
-         scp docker-compose.yaml deploy_compose.sh pi@raspberrypi:/opt/sensepro-controller/
+         scp docker-compose.yaml deploy_compose.sh .env pi@raspberrypi:/opt/sensepro-controller/
          ssh pi@raspberrypi "chmod +x /opt/sensepro-controller/deploy_compose.sh"
 
       # Run the deployment script on the remote server
       - name: Deploy application
-        env:
-         RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
-         RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
         run: |
-         ssh pi@raspberrypi "RABBITMQ_USER=$RABBITMQ_USER RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD /opt/sensepro-controller/deploy_compose.sh"
+          ssh pi@raspberrypi "/opt/sensepro-controller/deploy_compose.sh"

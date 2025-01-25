@@ -12,6 +12,8 @@ services:
       RASPBERRY_PI_SERIAL: ${RASPBERRY_PI_SERIAL}
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     volumes:
       - /sys/class/gpio:/sys/class/gpio # Access to GPIO sysfs
       - controller_data:/app

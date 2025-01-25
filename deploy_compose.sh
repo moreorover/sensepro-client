@@ -7,11 +7,6 @@ DEPLOY_DIR="/opt/sensepro-controller"
 # Ensure the script stops on any error
 set -e
 
-# Load environment variables passed by GitHub Actions
-export RABBITMQ_USER=${RABBITMQ_USER}
-export RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
-export RASPBERRY_PI_SERIAL=$(cat /proc/cpuinfo | grep Serial | awk '{print $3}')
-
 # Create the deployment directory if it doesn't exist
 if [ ! -d "$DEPLOY_DIR" ]; then
     echo "Creating deployment directory: $DEPLOY_DIR"
