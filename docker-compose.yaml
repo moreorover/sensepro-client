@@ -1,8 +1,6 @@
 services:
   controller:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/moreorover/sensepro-client:${VERSION:-latest}
     container_name: controller
     privileged: true
     devices:
