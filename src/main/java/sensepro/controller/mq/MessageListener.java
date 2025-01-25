@@ -9,6 +9,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import sensepro.controller.model.Config;
+import sensepro.controller.service.FileService;
 import sensepro.controller.service.PinService;
 
 import java.util.Set;
@@ -20,11 +21,13 @@ public class MessageListener {
     private final ObjectMapper objectMapper;
     private final Validator validator;
     private final PinService pinService;
+    private final FileService<Config> fileService;
 
-    public MessageListener(ObjectMapper objectMapper, Validator validator, PinService pinService) {
+    public MessageListener(ObjectMapper objectMapper, Validator validator, PinService pinService, FileService<Config> fileService) {
         this.objectMapper = objectMapper;
         this.validator = validator;
         this.pinService = pinService;
+        this.fileService = fileService;
     }
 
     @RabbitListener(queues = "#{rabbitMqConfiguration.getControllerQueueName()}")
@@ -39,13 +42,11 @@ public class MessageListener {
                 throw new ConstraintViolationException("Message validation failed", violations);
             }
 
-            // Process message
-            log.info("Processing message: {}", message.getMessageProperties().getMessageId());
-
             pinService.configure(config);
 
+            fileService.writeFile("config.json", config);
+
             log.info("New configuration processed.");
-            log.info("Message processed: {}", message.getMessageProperties().getMessageId());
 
         } catch (ConstraintViolationException e) {
             log.error("Validation error: {}", e.getMessage());
