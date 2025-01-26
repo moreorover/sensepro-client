@@ -62,7 +62,7 @@ jobs:
         run: |
           echo "RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}" > controller.config
           echo "RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}" >> controller.config
-          echo "RASPBERRY_PI_SERIAL=\$(cat /proc/cpuinfo | grep Serial | awk '{print \$3}')" >> controller.config
+          echo "RASPBERRY_PI_SERIAL=PLACEHOLDER" >> controller.config
 
       - name: Copy files to the remote server
         run: |
@@ -72,4 +72,5 @@ jobs:
       # Run the deployment script on the remote server
       - name: Deploy application
         run: |
+          ssh pi@raspberrypi "sed -i 's/PLACEHOLDER/\$(cat /proc/cpuinfo | grep Serial | awk \x27{print \$3}\x27)/' /home/pi/production/controller.config"
           ssh pi@raspberrypi 'bash -s' < ./deploy/deploy.sh $GITHUB_SHA
