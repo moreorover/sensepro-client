@@ -58,19 +58,11 @@ jobs:
       - name: Test SSH Connection
         run: ssh -o ConnectTimeout=30 "pi@raspberrypi" "echo 'SSH connection successful!'"
 
-      - name: Create controller.config file
-        run: |
-          echo "RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}" > controller.config
-          echo "RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}" >> controller.config
-          echo "RASPBERRY_PI_SERIAL=PLACEHOLDER" >> controller.config
-
       - name: Copy files to the remote server
         run: |
-         scp controller.config pi@raspberrypi:/home/pi/production/
          scp ./target/controller-${{ github.sha }}.jar pi@raspberrypi:/home/pi/releases/controller-${{ github.sha }}.jar
 
       # Run the deployment script on the remote server
       - name: Deploy application
         run: |
-          ssh pi@raspberrypi "sed -i 's|PLACEHOLDER|$(cat /proc/cpuinfo | grep Serial | awk \x27{print \$3}\x27)|' /home/pi/production/controller.config"
           ssh pi@raspberrypi 'bash -s' < ./deploy/deploy.sh $GITHUB_SHA
