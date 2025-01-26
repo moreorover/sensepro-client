@@ -1,0 +1,29 @@
+# /etc/systemd/system/controller.service
+
+# Unit Section
+[Unit]
+# Human Readable Description of the Service
+Description=SensePro Controller ServiceTodo Tasks API
+# After=list of units that must be started before this unit works
+After=syslog.target
+After=network.target
+
+# Service Section
+[Service]
+# simple is the default value of Type, it is commonly left off
+Type=simple
+# User= sets the user, login shell, and home directory associated with this unit
+User=pi
+# EnvironmentFile= points to the environment variables needed by the executable in this unit file
+EnvironmentFile=/home/pi/production/controller.config
+# ExecStart= the exact command, or application to be run when this unit starts
+ExecStart=/usr/bin/java -jar /home/pi/production/controller SuccessExitStatus=143
+# Restart= if the unit should restart after failing
+Restart=always
+
+WorkingDirectory=/home/pi/production
+
+# Install Section
+[Install]
+# WantedBy=multi-user.target is the command neccessary so this systemd unit can be enabled (which is what allows it to automatically start when the server boots up)
+WantedBy=multi-user.target
