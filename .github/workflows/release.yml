@@ -72,5 +72,5 @@ jobs:
       # Run the deployment script on the remote server
       - name: Deploy application
         run: |
-          ssh pi@raspberrypi "sed -i 's/PLACEHOLDER/\$(cat /proc/cpuinfo | grep Serial | awk \x27{print \$3}\x27)/' /home/pi/production/controller.config"
+          ssh pi@raspberrypi "sed -i 's|PLACEHOLDER|$(cat /proc/cpuinfo | grep Serial | awk \x27{print \$3}\x27)|' /home/pi/production/controller.config"
           ssh pi@raspberrypi 'bash -s' < ./deploy/deploy.sh $GITHUB_SHA
