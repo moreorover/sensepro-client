@@ -62,7 +62,7 @@ jobs:
         run: |
           echo "RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}" > controller.config
           echo "RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}" >> controller.config
-          echo "RASPBERRY_PI_SERIAL=$(cat /proc/cpuinfo | grep Serial | awk '{print $3}')" >> controller.config
+          echo "RASPBERRY_PI_SERIAL=\$(cat /proc/cpuinfo | grep Serial | awk '{print \$3}')" >> controller.config
 
       - name: Copy files to the remote server
         run: |
