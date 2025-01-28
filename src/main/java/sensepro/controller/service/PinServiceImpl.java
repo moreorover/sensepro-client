@@ -24,9 +24,9 @@ public class PinServiceImpl implements PinService {
     private Context pi4j;
     private final FileService<Config> fileService;
     @Getter
-    private final Map<Integer, DigitalOutput> pinMap;
+    private final Map<Integer, DigitalInput> pinMap;
     @Getter
-    private final Map<DigitalOutput, DigitalStateChangeListener> listenerMap;
+    private final Map<DigitalInput, DigitalStateChangeListener> listenerMap;
 
     public PinServiceImpl(MessagePublisher messagePublisher, FileService<Config> fileService) {
         this.messagePublisher = messagePublisher;
@@ -74,16 +74,12 @@ public class PinServiceImpl implements PinService {
     }
 
     public void configurePin(int pin) {
-        var buttonConfig = DigitalOutput.newConfigBuilder(pi4j)
+        var buttonConfig = DigitalInput.newConfigBuilder(pi4j)
                 .id("button-" + pin)
                 .name("Button on pin " + pin)
                 .address(pin)
-//                .pull(PullResistance.PULL_DOWN)
-//                .debounce(5000L)
-                .provider("gpiod-digital-output")
-                .shutdown(DigitalState.HIGH)
-                .initial(DigitalState.HIGH)
-                .build();
+                .pull(PullResistance.PULL_DOWN)
+                .debounce(5000L);
         var button = pi4j.create(buttonConfig);
         DigitalStateChangeListener listener = e -> {
             log.info("Pin {} state changed to {}", pin, e.state());
@@ -101,7 +97,7 @@ public class PinServiceImpl implements PinService {
     }
 
     public void clearPin(int pin) {
-        DigitalOutput button = pinMap.get(pin);
+        DigitalInput button = pinMap.get(pin);
         if (button != null) {
             DigitalStateChangeListener listener = listenerMap.get(button);
             if (listener != null) {
