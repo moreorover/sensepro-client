@@ -80,7 +80,7 @@ public class PinServiceImpl implements PinService {
                 .address(pin)
                 .pull(PullResistance.PULL_DOWN)
                 .debounce(5000L)
-                .provider("gpiod-digital-input");
+                .provider("gpiod-digital-output");
         var button = pi4j.create(buttonConfig);
         DigitalStateChangeListener listener = e -> {
             log.info("Pin {} state changed to {}", pin, e.state());
