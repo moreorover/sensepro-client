@@ -29,7 +29,7 @@ public class ScheduledTasks {
         messagePublisher.sendMessage("system", "message: " + now);
     }
 
-    @Scheduled(cron = "*/30 * * * * *")
+//    @Scheduled(cron = "*/30 * * * * *")
     public void task2() {
         LocalDateTime now = LocalDateTime.now();
         // Task logic goes here
