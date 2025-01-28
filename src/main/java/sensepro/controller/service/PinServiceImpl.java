@@ -135,8 +135,8 @@ public class PinServiceImpl implements PinService {
         for (int pin : pins) {
             clearPin(pin); // Reuse clearPin method
         }
-        pi4j.shutdown();
-        pi4j = Pi4J.newAutoContext();
+//        pi4j.shutdown();
+//        pi4j = Pi4J.newAutoContext();
         log.info("All GPIO pins have been cleared.");
     }
 }
