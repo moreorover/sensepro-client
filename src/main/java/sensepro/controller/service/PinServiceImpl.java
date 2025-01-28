@@ -1,6 +1,7 @@
 package sensepro.controller.service;
 
 import com.pi4j.io.gpio.digital.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import sensepro.controller.model.Config;
 import sensepro.controller.model.Device;
@@ -22,7 +23,9 @@ public class PinServiceImpl implements PinService {
     private final MessagePublisher messagePublisher;
     private Context pi4j;
     private final FileService<Config> fileService;
+    @Getter
     private final Map<Integer, DigitalInput> pinMap;
+    @Getter
     private final Map<DigitalInput, DigitalStateChangeListener> listenerMap;
 
     public PinServiceImpl(MessagePublisher messagePublisher, FileService<Config> fileService) {
@@ -64,7 +67,7 @@ public class PinServiceImpl implements PinService {
 //        pi4j.registry().all().forEach((id, io) -> log.info("Registered IO: {}", id));
 
         for (Device device : config.devices) {
-            if (device.pin != null) {
+            if (device.pin != null ) {
                 configurePin(device.pin);
             }
         }
@@ -79,6 +82,7 @@ public class PinServiceImpl implements PinService {
                 .debounce(3000L);
         var button = pi4j.create(buttonConfig);
         DigitalStateChangeListener listener = e -> {
+            log.info("Pin {} state changed to {}", pin, e.state());
             if (e.state() == DigitalState.LOW) {
 //                messagePublisher.sendMessage("Button on pin " + pin + " was pressed");
                 log.info("Button on pin {} was pressed", pin);
