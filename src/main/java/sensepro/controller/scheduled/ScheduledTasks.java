@@ -17,7 +17,7 @@ public class ScheduledTasks {
         this.messagePublisher = messagePublisher;
     }
 
-    @Scheduled(cron = "*/30 * * * * *")
+//    @Scheduled(cron = "*/30 * * * * *")
     public void task1() {
         LocalDateTime now = LocalDateTime.now();
         // Task logic goes here
