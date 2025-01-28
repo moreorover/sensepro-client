@@ -80,8 +80,9 @@ public class PinServiceImpl implements PinService {
                 .address(pin)
                 .pull(PullResistance.PULL_DOWN)
                 .debounce(5000L)
-                .provider("gpiod-digital-input");
-        var button = pi4j.din().create(buttonConfig);
+                .provider("gpiod-digital-input")
+                .build();
+        var button = pi4j.create(buttonConfig);
         DigitalStateChangeListener listener = e -> {
             log.info("Pin {} state changed to {}", pin, e.state());
             if (e.state() == DigitalState.LOW) {
@@ -135,8 +136,8 @@ public class PinServiceImpl implements PinService {
         for (int pin : pins) {
             clearPin(pin); // Reuse clearPin method
         }
-//        pi4j.shutdown();
-//        pi4j = Pi4J.newAutoContext();
+        pi4j.shutdown();
+        pi4j = Pi4J.newAutoContext();
         log.info("All GPIO pins have been cleared.");
     }
 }
