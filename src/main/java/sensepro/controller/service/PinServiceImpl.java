@@ -78,7 +78,7 @@ public class PinServiceImpl implements PinService {
                 .id("button-" + pin)
                 .name("Button on pin " + pin)
                 .address(pin)
-                .pull(PullResistance.PULL_DOWN)
+                .pull(PullResistance.PULL_UP)
                 .debounce(5000L)
                 .provider("gpiod-digital-input")
                 .build();
